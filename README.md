@@ -4,7 +4,7 @@ A simple Python password generator and manager with JSON storage.
 
 ## Features
 
-- Generate strong, random 15-character passwords
+- Generate strong, random 15-character passwords (by default)
 - Save passwords for different websites/accounts
 - View all saved passwords
 - Stores data locally in `passwords.json`
