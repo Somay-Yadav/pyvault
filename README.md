@@ -15,9 +15,7 @@ A simple Python password generator and manager with JSON storage.
 
 ## Usage
 
-Run the file:
-
-pyvault.py
+Run the file: pyvault.py
 
 You'll see a menu:
 
