@@ -15,21 +15,19 @@ A simple Python password generator and manager with JSON storage.
 
 ## Usage
 
-Run the script:
+Run the file:
 
-\`\`\`bash
-python password_manager.py
-\`\`\`
+pyvault.py
 
 You'll see a menu:
 
-\`\`\`
------ PASSWORD MANAGER -----
+
+----- pyvault(PASSWORD VAULT) -----
 1. Save Password
 2. View Password
 3. Generate Password
 4. Exit
-\`\`\`
+
 
 - **Save Password** — enter a website name and password to store it
 - **View Password** — list all saved websites and passwords
