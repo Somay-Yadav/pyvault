@@ -1,7 +1,9 @@
+from doctest import master
 import secrets
 import string
 import json
 from encryption import encrypt_password, decrypt_password
+from master import check_master
 
 passwords = {}
 
@@ -17,8 +19,16 @@ def generate_password(length=15):
     password = "".join(secrets.choice(chars) for _ in range(length))
     return password
 
+master = input("Enter the master password: ")
+
+if not check_master(master):
+    print("Invalid master password.")
+    exit()
+
+print("Vault Unlocked Successfully! 🔓")
+
 while True:
-    print("\n----- pyvault (PASSWORD VAULT) -----")
+    print("\n----- 🔐 PyVault - Password Manager -----")
     print("1. Save Password")
     print("2. View Password")
     print("3. Generate Password")
