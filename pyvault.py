@@ -3,7 +3,7 @@ import secrets
 import string
 import json
 from encryption import encrypt_password, decrypt_password
-from master import check_master
+from master import check_master, create_master, master_exists
 
 passwords = {}
 
@@ -19,13 +19,27 @@ def generate_password(length=15):
     password = "".join(secrets.choice(chars) for _ in range(length))
     return password
 
-master = input("Enter the master password: ")
 
-if not check_master(master):
-    print("Invalid master password.")
-    exit()
 
-print("Vault Unlocked Successfully! 🔓")
+if not master_exists():
+
+    print("No master password found. Creating a new one...")
+
+    new_master_password = input("Create a new master password: ")
+
+    create_master(new_master_password)
+
+    print("Master password created successfully! 🔐")
+
+else:
+
+    master = input("Enter the master password: ")
+
+    if not check_master(master):
+        print("Invalid master password.")
+        exit()
+
+    print("Vault Unlocked Successfully! 🔓")
 
 while True:
     print("\n----- 🔐 PyVault - Password Manager -----")

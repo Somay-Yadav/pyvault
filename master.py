@@ -21,3 +21,6 @@ def check_master(password):
         saved = file.read()
 
     return saved == hashed
+
+def master_exists():
+    return os.path.exists(MASTER_FILE)
