@@ -1,23 +1,32 @@
 # 🔐 PyVault - Password Manager
 
-PyVault is a simple command-line password manager built with Python.
-It allows users to generate, store, and manage passwords securely.
+PyVault is a secure command-line password manager built with Python.
+
+It allows users to generate, store, search, update, and delete passwords while keeping saved credentials encrypted.
 
 ## 🚀 Features
 
-### Version 1
+### PyVault v1
 
-* Generate random passwords
+* Generate passwords
 * Store passwords locally
-* View saved passwords
 * JSON-based storage
+* View saved passwords
 
-### Version 2 (Current)
+### PyVault v2 🔥
 
-* 🔒 Secure password generation using `secrets`
-* 🔐 Password encryption using `cryptography (Fernet)`
-* 🛡️ Added `.gitignore` protection for sensitive files
-* 📁 Improved project security structure
+* 🔐 Secure password generation using Python `secrets`
+* 🔒 Password encryption using `cryptography` (Fernet)
+* 🔑 Master password protection
+* 🛡️ Automatic first-time vault setup
+* 🙈 Hidden password input using `getpass`
+* 💪 Password strength checker
+* 🔎 Search saved passwords
+* ✏️ Update saved passwords
+* 🗑️ Delete saved passwords
+* 📁 Protected sensitive files using `.gitignore`
+
+---
 
 ## 🛠️ Installation
 
@@ -39,76 +48,95 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
+---
+
 ## ▶️ Usage
 
-Run the program:
+Run PyVault:
 
 ```bash
 python pyvault.py
 ```
 
-The program allows you to:
+### First Launch
 
-* Generate passwords
-* Save passwords
-* View stored passwords
+On the first run, PyVault will ask you to create a master password.
+
+This password is used to unlock your vault.
+
+---
 
 ## 🔐 Security
 
-PyVault v2 uses:
+PyVault uses:
 
-* `secrets` module for stronger random password generation
-* `Fernet encryption` to encrypt stored passwords
+* `secrets` module for secure password generation
+* Fernet encryption for stored passwords
+* SHA-256 hashing for the master password
 
-Passwords are not stored as plain text.
+Passwords are never stored as plain text.
 
 Example:
 
-Before encryption:
+Before:
 
-```text
+```
 MyPassword123
 ```
 
 After encryption:
 
-```text
+```
 gAAAAABlxxxxxxxxxxxx
 ```
 
+---
+
 ## 📂 Project Structure
 
-```text
+```
 PyVault/
 │
 ├── pyvault.py
 ├── encryption.py
+├── master.py
+├── strength.py
 ├── passwords.json
 ├── key.key
+├── master.key
 ├── requirements.txt
 ├── README.md
 └── .gitignore
 ```
 
+---
+
 ## ⚠️ Important
 
-Keep these files private:
+Never share:
 
 ```
 key.key
+master.key
 passwords.json
 ```
 
-They are ignored by Git using `.gitignore`.
+These files contain sensitive vault data and are ignored by Git.
 
-## 🔮 Future Improvements
+---
 
-* Master password protection
-* Password search feature
-* Update/delete saved passwords
-* Better CLI interface
+## 🔮 Future Improvements (v3)
+
+* Better password viewing interface
+* Hide passwords by default
+* Reveal password option
+* OOP/class-based structure
+* Improved project architecture
 * Database storage
-* Password strength checker
+* Clipboard support
+* GUI version
+
+---
 
 ## 👨‍💻 Author
 

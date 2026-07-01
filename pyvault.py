@@ -5,6 +5,7 @@ import json
 from encryption import encrypt_password, decrypt_password
 from master import check_master, create_master, master_exists
 from getpass import getpass
+from strength import check_strength
 
 passwords = {}
 
@@ -14,6 +15,9 @@ try:
         passwords = json.load(file)
 except FileNotFoundError:
     pass
+
+def pause():
+    input("Press Enter to continue...")
 
 def generate_password(length=15):
     chars = string.ascii_letters + string.digits + "!@#$%^&*~"
@@ -33,8 +37,16 @@ def view_password():
     if not passwords:
             print("No Data Found.")
     else:
-        for site,pwd in passwords.items():
-            print(site, ":", decrypt_password(pwd))
+        print("\n========================")
+        print("       🔐 Your Vault")
+        print("========================")
+
+        for site, password in passwords.items():
+            print(f"""
+        🌐 Website: {site}
+        🔑 Password: {decrypt_password(password)}
+        ------------------------
+        """)
 
 
 def search_password():
@@ -101,17 +113,29 @@ else:
         print("Invalid master password.")
         exit()
 
-    print("Vault Unlocked Successfully! 🔓")
+    print("""
+========================
+🔓 Vault unlocked
+Welcome to PyVault
+========================
+""")
 
 while True:
-    print("\n----- 🔐 PyVault - Password Manager -----")
-    print("1. Save Password")
-    print("2. View Password")
-    print("3. Generate Password")
-    print("4. Search Password")
-    print("5. Delete Password")
-    print("6. Update Password")
-    print("7. Exit")
+    print("""
+========================
+        🔐 PyVault
+========================
+
+1. ➕ Add Password
+2. 📂 View Passwords
+3. 🔑 Generate Password
+4. 🔎 Search Password
+5. ✏️ Update Password
+6. 🗑️ Delete Password
+7. 🚪 Exit
+
+========================
+""")
 
     choice = input("Enter your choice: ")
 
@@ -119,26 +143,40 @@ while True:
         site = input("Enter the name of website: ")
         pwd = getpass("Enter the password: ")
 
+        print("Password Strength:", check_strength(pwd))
         save_password(site, pwd)
+
+        pause()
     
     elif choice == "2":
         view_password()
+
+        pause()
     
     elif choice == "3":
         length = int(input("Enter the length of password (default is 15): "))
         print("Generated Password: ", generate_password(length))
+        print("Password Strength:", check_strength(generate_password(length)))
+
+        pause()
     
     elif choice == "4":
         search_password()
 
+        pause()
+
     elif choice == "5":
         delete_password()
+
+        pause()
 
     elif choice == "6":
         update_password()
 
+        pause()
+
     elif choice == "7":
-        print("Exiting Program...")
+        print("Goodbye 👋")
         break
 
     else:
