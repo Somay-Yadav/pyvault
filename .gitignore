@@ -2,3 +2,4 @@ passwords.json
 __pycache__/
 *.pyc
 .env
+key.key

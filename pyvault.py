@@ -1,6 +1,7 @@
 import secrets
 import string
 import json
+from encryption import encrypt_password, decrypt_password
 
 passwords = {}
 
@@ -29,7 +30,7 @@ while True:
         site = input("Enter the name of website: ")
         pwd = input("Enter the password: ")
 
-        passwords[site] = pwd
+        passwords[site] = encrypt_password(pwd)
 
         with open("passwords.json","w") as file:
             json.dump(passwords, file, indent=2)
@@ -41,7 +42,7 @@ while True:
             print("No Data Found.")
         else:
             for site,pwd in passwords.items():
-                print(f"{site} : {pwd}")
+                print(site, ":", decrypt_password(pwd))
     
     elif choice == "3":
         length = int(input("Enter the length of password (default is 15): "))
