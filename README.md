@@ -1,41 +1,117 @@
-# pyvault
+# 🔐 PyVault - Password Manager
 
-A simple Python password generator and manager with JSON storage.
+PyVault is a simple command-line password manager built with Python.
+It allows users to generate, store, and manage passwords securely.
 
-## Features
+## 🚀 Features
 
-- Generate strong, random 15-character passwords
-- Save passwords for different websites/accounts
-- View all saved passwords
-- Stores data locally in `passwords.json`
+### Version 1
 
-## Requirements
+* Generate random passwords
+* Store passwords locally
+* View saved passwords
+* JSON-based storage
 
-- Python 3.x (no external libraries needed)
+### Version 2 (Current)
 
-## Usage
+* 🔒 Secure password generation using `secrets`
+* 🔐 Password encryption using `cryptography (Fernet)`
+* 🛡️ Added `.gitignore` protection for sensitive files
+* 📁 Improved project security structure
 
-Run the file: pyvault.py
+## 🛠️ Installation
 
-You'll see a menu:
+Clone the repository:
 
+```bash
+git clone https://github.com/Somay-Yadav/pyvault.git
+```
 
------ pyvault(PASSWORD VAULT) -----
-1. Save Password
-2. View Password
-3. Generate Password
-4. Exit
+Move into the project folder:
 
+```bash
+cd pyvault
+```
 
-- **Save Password** — enter a website name and password to store it
-- **View Password** — list all saved websites and passwords
-- **Generate Password** — generate a random secure password
-- **Exit** — quit the program
+Install dependencies:
 
-## Data Storage
+```bash
+pip install -r requirements.txt
+```
 
-Passwords are saved in a local `passwords.json` file in the same folder as the script. This file is excluded from version control via `.gitignore` to avoid exposing saved passwords.
+## ▶️ Usage
 
-## Disclaimer
+Run the program:
 
-This project stores passwords in plain text and is intended for learning purposes. It is **not** recommended for storing real, sensitive passwords without adding encryption.
+```bash
+python pyvault.py
+```
+
+The program allows you to:
+
+* Generate passwords
+* Save passwords
+* View stored passwords
+
+## 🔐 Security
+
+PyVault v2 uses:
+
+* `secrets` module for stronger random password generation
+* `Fernet encryption` to encrypt stored passwords
+
+Passwords are not stored as plain text.
+
+Example:
+
+Before encryption:
+
+```text
+MyPassword123
+```
+
+After encryption:
+
+```text
+gAAAAABlxxxxxxxxxxxx
+```
+
+## 📂 Project Structure
+
+```text
+PyVault/
+│
+├── pyvault.py
+├── encryption.py
+├── passwords.json
+├── key.key
+├── requirements.txt
+├── README.md
+└── .gitignore
+```
+
+## ⚠️ Important
+
+Keep these files private:
+
+```
+key.key
+passwords.json
+```
+
+They are ignored by Git using `.gitignore`.
+
+## 🔮 Future Improvements
+
+* Master password protection
+* Password search feature
+* Update/delete saved passwords
+* Better CLI interface
+* Database storage
+* Password strength checker
+
+## 👨‍💻 Author
+
+Somay Yadav
+
+Built with Python 🐍
