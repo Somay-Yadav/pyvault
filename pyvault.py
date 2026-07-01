@@ -1,4 +1,4 @@
-import random
+import secrets
 import string
 import json
 
@@ -13,7 +13,7 @@ except FileNotFoundError:
 
 def generate_password(length=15):
     chars = string.ascii_letters + string.digits + "!@#$%^&*~"
-    password = "".join(random.choice(chars) for _ in range(length))
+    password = "".join(secrets.choice(chars) for _ in range(length))
     return password
 
 while True:
