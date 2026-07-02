@@ -4,14 +4,14 @@ PyVault is a secure command-line password manager built with Python.
 
 It allows users to generate, store, search, update, and delete passwords while keeping saved credentials encrypted.
 
-<<<<<<< HEAD
+
 - Generate strong, random 15-character passwords (by default)
 - Save passwords for different websites/accounts
 - View all saved passwords
 - Stores data locally in `passwords.json`
-=======
+
 ## 🚀 Features
->>>>>>> v2
+
 
 ### PyVault v1
 
