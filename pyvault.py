@@ -166,12 +166,12 @@ while True:
         pause()
 
     elif choice == "5":
-        delete_password()
+        update_password()
 
         pause()
 
     elif choice == "6":
-        update_password()
+        delete_password()
 
         pause()
 
