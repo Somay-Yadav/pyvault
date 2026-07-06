@@ -175,3 +175,34 @@ class Database:
         self.connection.commit()
 
         return self.cursor.rowcount > 0
+    
+    def set_setting(self, key: str, value: str) -> None:
+        """Create or update a setting."""
+
+        self.cursor.execute(
+            """
+            INSERT INTO settings(key, value)
+            VALUES(?, ?)
+            ON CONFLICT(key)
+            DO UPDATE SET value = excluded.value
+            """,
+            (key, value),
+        )
+
+        self.connection.commit()
+
+    def get_setting(self, key: str) -> str | None:
+        """Return a setting value."""
+
+        self.cursor.execute(
+            """
+            SELECT value
+            FROM settings
+            WHERE key = ?
+            """,
+            (key,),
+        )
+
+        row = self.cursor.fetchone()
+
+        return row["value"] if row else None

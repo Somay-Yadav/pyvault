@@ -6,95 +6,49 @@ def main():
     db.create_tables()
 
     print("=" * 50)
-    print("PyVault v3 - Database CRUD Test")
+    print("PyVault v3 - Settings API Test")
     print("=" * 50)
 
     # ----------------------------
-    # CREATE
+    # CREATE SETTINGS
     # ----------------------------
-    print("\n[CREATE]")
+    print("\n[CREATE SETTINGS]")
 
-    account_id = db.add_account(
-        service="GitHub",
-        username="boss123",
-        password="encrypted_password",
-        category="Development",
-        notes="Main GitHub account",
-        favorite=True,
-    )
+    db.set_setting("theme", "dark")
+    db.set_setting("auto_lock", "5")
+    db.set_setting("backup_enabled", "true")
 
-    print(f"✅ Account created with ID: {account_id}")
+    print("✅ Settings saved.")
 
     # ----------------------------
-    # READ ALL
+    # READ SETTINGS
     # ----------------------------
-    print("\n[READ ALL]")
+    print("\n[READ SETTINGS]")
 
-    accounts = db.get_accounts()
-
-    for account in accounts:
-        print(
-            f"""
-ID: {account["id"]}
-Service: {account["service"]}
-Username: {account["username"]}
-Category: {account["category"]}
-Favorite: {bool(account["favorite"])}
-----------------------------
-"""
-        )
+    print("Theme:", db.get_setting("theme"))
+    print("Auto Lock:", db.get_setting("auto_lock"))
+    print("Backup Enabled:", db.get_setting("backup_enabled"))
 
     # ----------------------------
-    # READ ONE
+    # UPDATE SETTING
     # ----------------------------
-    print("\n[READ ONE]")
+    print("\n[UPDATE SETTING]")
 
-    account = db.get_account(account_id)
+    db.set_setting("theme", "light")
 
-    if account:
-        print(f"Found: {account['service']} ({account['username']})")
+    print("Updated Theme:", db.get_setting("theme"))
+
+    # ----------------------------
+    # MISSING SETTING
+    # ----------------------------
+    print("\n[MISSING SETTING]")
+
+    value = db.get_setting("language")
+
+    if value is None:
+        print("✅ 'language' setting does not exist.")
     else:
-        print("Account not found.")
-
-    # ----------------------------
-    # UPDATE
-    # ----------------------------
-    print("\n[UPDATE]")
-
-    success = db.update_account(
-        account_id=account_id,
-        service="GitHub",
-        username="boss_updated",
-        password="new_encrypted_password",
-        category="Development",
-        notes="Updated account",
-        favorite=False,
-    )
-
-    print("Updated:", success)
-
-    # Verify update
-    account = db.get_account(account_id)
-
-    print(f"New Username: {account['username']}")
-    print(f"Favorite: {bool(account['favorite'])}")
-
-    # ----------------------------
-    # DELETE
-    # ----------------------------
-    print("\n[DELETE]")
-
-    deleted = db.delete_account(account_id)
-
-    print("Deleted:", deleted)
-
-    # Verify delete
-    account = db.get_account(account_id)
-
-    if account is None:
-        print("✅ Account successfully removed.")
-    else:
-        print("❌ Delete failed.")
+        print("Language:", value)
 
     db.close()
 
