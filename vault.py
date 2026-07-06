@@ -1,0 +1,107 @@
+from database import Database
+from encryption import Encryption
+
+
+class Vault:
+    def __init__(
+        self,
+        database: Database,
+        encryption: Encryption,
+    ):
+        self.db = database
+        self.encryption = encryption
+
+    def add_account(
+        self,
+        service: str,
+        username: str,
+        password: str,
+        category: str | None = None,
+        notes: str | None = None,
+        favorite: bool = False,
+    ) -> int:
+        """
+        Encrypt the password and save the account.
+        """
+
+        encrypted_password = self.encryption.encrypt(password)
+
+        return self.db.add_account(
+            service=service,
+            username=username,
+            password=encrypted_password,
+            category=category,
+            notes=notes,
+            favorite=favorite,
+        )
+    
+    def get_account(self, account_id: int):
+        """
+        Return an account with its password decrypted.
+        """
+
+        account = self.db.get_account(account_id)
+
+        if account is None:
+            return None
+
+        account = dict(account)
+
+        account["password"] = self.encryption.decrypt(
+            account["password"]
+        )
+
+        return account
+    
+    def get_accounts(self) -> list[dict]:
+        """
+        Return all accounts with decrypted passwords.
+        """
+
+        accounts = self.db.get_accounts()
+
+        decrypted_accounts = []
+
+        for account in accounts:
+            account = dict(account)
+
+            account["password"] = self.encryption.decrypt(
+                account["password"]
+            )
+
+            decrypted_accounts.append(account)
+
+        return decrypted_accounts
+    
+    def update_account(
+        self,
+        account_id: int,
+        service: str,
+        username: str,
+        password: str,
+        category: str | None = None,
+        notes: str | None = None,
+        favorite: bool = False,
+    ) -> bool:
+        """
+        Encrypt the password and update an account.
+        """
+
+        encrypted_password = self.encryption.encrypt(password)
+
+        return self.db.update_account(
+            account_id=account_id,
+            service=service,
+            username=username,
+            password=encrypted_password,
+            category=category,
+            notes=notes,
+            favorite=favorite,
+        )
+    
+    def delete_account(self, account_id: int) -> bool:
+        """
+        Delete an account.
+        """
+
+        return self.db.delete_account(account_id)
