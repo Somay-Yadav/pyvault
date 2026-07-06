@@ -1,5 +1,5 @@
-from database import Database
-from encryption import Encryption
+from core.database import Database
+from core.encryption import Encryption
 
 
 class Vault:
@@ -105,3 +105,57 @@ class Vault:
         """
 
         return self.db.delete_account(account_id)
+    
+    def search_accounts(self, keyword: str) -> list[dict]:
+        """Search accounts with decrypted passwords."""
+
+        accounts = self.db.search_accounts(keyword)
+
+        decrypted = []
+
+        for account in accounts:
+            account = dict(account)
+            account["password"] = self.encryption.decrypt(
+                account["password"]
+            )
+            decrypted.append(account)
+
+        return decrypted
+    
+    def get_favorites(self) -> list[dict]:
+        """Return favorite accounts."""
+
+        accounts = self.db.get_favorites()
+
+        decrypted = []
+
+        for account in accounts:
+            account = dict(account)
+            account["password"] = self.encryption.decrypt(
+                account["password"]
+            )
+
+            decrypted.append(account)
+
+        return decrypted
+    
+    def toggle_favorite(self, account_id: int) -> bool:
+        return self.db.toggle_favorite(account_id)
+    
+    def get_categories(self):
+        return self.db.get_categories()
+    
+    def get_accounts_by_category(self, category):
+        accounts = self.db.get_accounts_by_category(category)
+
+        decrypted = []
+
+        for account in accounts:
+            account = dict(account)
+            account["password"] = self.encryption.decrypt(
+                account["password"]
+            )
+
+            decrypted.append(account)
+
+        return decrypted

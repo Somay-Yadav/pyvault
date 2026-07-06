@@ -1,5 +1,5 @@
 from argon2 import PasswordHasher
-from database import Database
+from core.database import Database
 from argon2.exceptions import VerifyMismatchError
 import os
 import base64

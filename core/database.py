@@ -105,6 +105,28 @@ class Database:
 
         return self.cursor.fetchall()
     
+    def search_accounts(self, keyword: str) -> list[sqlite3.Row]:
+        """Search accounts by service, username or category."""
+
+        self.cursor.execute(
+            """
+            SELECT *
+            FROM accounts
+            WHERE
+                service LIKE ?
+                OR username LIKE ?
+                OR category LIKE ?
+            ORDER BY service
+            """,
+            (
+                f"%{keyword}%",
+                f"%{keyword}%",
+                f"%{keyword}%",
+            ),
+        )
+
+        return self.cursor.fetchall()
+    
     def get_account(self, account_id: int) -> sqlite3.Row | None:
         """Return a single account by its ID."""
 
@@ -217,5 +239,75 @@ class Database:
             FROM settings
             ORDER BY key
         """)
+
+        return self.cursor.fetchall()
+    
+    def get_favorites(self) -> list[sqlite3.Row]:
+        """Return favorite accounts."""
+
+        self.cursor.execute(
+            """
+            SELECT *
+            FROM accounts
+            WHERE favorite = 1
+            ORDER BY service
+            """
+        )
+
+        return self.cursor.fetchall()
+    
+    def toggle_favorite(self, account_id: int) -> bool:
+        """Toggle favorite status."""
+
+        account = self.get_account(account_id)
+
+        if account is None:
+            return False
+
+        new_value = 0 if account["favorite"] else 1
+
+        self.cursor.execute(
+            """
+            UPDATE accounts
+            SET favorite = ?
+            WHERE id = ?
+            """,
+            (new_value, account_id)
+        )
+
+        self.connection.commit()
+
+        return True
+    
+    def get_categories(self) -> list[sqlite3.Row]:
+        """Return all categories with account count."""
+
+        self.cursor.execute("""
+            SELECT
+                category,
+                COUNT(*) as total
+            FROM accounts
+            WHERE category IS NOT NULL
+            AND category != ''
+            GROUP BY category
+            ORDER BY category
+        """)
+
+        return self.cursor.fetchall()
+    
+    def get_accounts_by_category(
+        self,
+        category: str
+    ) -> list[sqlite3.Row]:
+
+        self.cursor.execute(
+            """
+            SELECT *
+            FROM accounts
+            WHERE category = ?
+            ORDER BY service
+            """,
+            (category,)
+        )
 
         return self.cursor.fetchall()
