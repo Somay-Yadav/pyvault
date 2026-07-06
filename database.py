@@ -1,5 +1,6 @@
 import sqlite3
 from pathlib import Path
+from datetime import datetime
 
 # Database location
 
@@ -13,6 +14,7 @@ class Database:
         DATA_DIR.mkdir(exist_ok=True)
 
         self.connection = sqlite3.connect(DATABASE_PATH)
+        self.connection.row_factory = sqlite3.Row
         self.cursor = self.connection.cursor()
 
 
@@ -27,7 +29,7 @@ class Database:
                             password TEXT NOT NULL,
                             category TEXT,
                             notes TEXT,
-                            favourite INTEGER DEFAULT 0,
+                            favorite INTEGER DEFAULT 0,
                             created_at TEXT,
                             updated_at TEXT
                             );
@@ -43,3 +45,133 @@ class Database:
 
     def close(self):
         self.connection.close()
+
+
+    def add_account(
+            self,
+            service : str,
+            username : str,
+            password : str,
+            category : str | None = None,
+            notes : str | None = None,
+            favorite : bool = False,
+    ) -> int:
+        
+        """Add new accounts to database"""
+
+        current_time = datetime.now().isoformat()
+
+        self.cursor.execute(
+            """
+            INSERT INTO accounts (
+                service,
+                username,
+                password,
+                category,
+                notes,
+                favorite,
+                created_at,
+                updated_at
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                service,
+                username,
+                password,
+                category,
+                notes,
+                int(favorite),
+                current_time,
+                current_time,
+            ),
+        )
+
+
+        self.connection.commit()
+
+        return self.cursor.lastrowid
+    
+    def get_accounts(self) -> list[sqlite3.Row]:
+        # Return all accounts.
+
+        self.cursor.execute("""
+            SELECT *
+            FROM accounts
+            ORDER BY service ASC
+        """)
+
+        return self.cursor.fetchall()
+    
+    def get_account(self, account_id: int) -> sqlite3.Row | None:
+        """Return a single account by its ID."""
+
+        self.cursor.execute(
+            """
+            SELECT *
+            FROM accounts
+            WHERE id = ?
+            """,
+            (account_id,)
+        )
+
+        return self.cursor.fetchone()
+    
+    def update_account(
+        self,
+        account_id: int,
+        service: str,
+        username: str,
+        password: str,
+        category: str | None = None,
+        notes: str | None = None,
+        favorite: bool = False,
+    ) -> bool:
+        """Update an existing account."""
+
+        current_time = datetime.now().isoformat()
+
+        self.cursor.execute(
+            """
+            UPDATE accounts
+            SET
+                service = ?,
+                username = ?,
+                password = ?,
+                category = ?,
+                notes = ?,
+                favorite = ?,
+                updated_at = ?
+            WHERE id = ?
+            """,
+            (
+                service,
+                username,
+                password,
+                category,
+                notes,
+                int(favorite),
+                current_time,
+                account_id,
+            ),
+        )
+
+        self.connection.commit()
+
+        return self.cursor.rowcount > 0
+    
+
+    def delete_account(self, account_id: int) -> bool:
+        """Delete an account."""
+
+        self.cursor.execute(
+            """
+            DELETE FROM accounts
+            WHERE id = ?
+            """,
+            (account_id,),
+        )
+
+        self.connection.commit()
+
+        return self.cursor.rowcount > 0
