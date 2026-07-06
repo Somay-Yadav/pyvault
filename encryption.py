@@ -1,35 +1,44 @@
+import base64
+
 from cryptography.fernet import Fernet
-import os
-
-KEY_FILE = "key.key"
-
-def generate_key():
-    key = Fernet.generate_key()
-
-    with open(KEY_FILE, "wb") as file:
-        file.write(key) 
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+from cryptography.hazmat.primitives import hashes
 
 
-def load_key():
-    if not os.path.exists(KEY_FILE):
-        generate_key()
+class Encryption:
+    def __init__(self, master_password: str, salt: bytes):
+        self.master_password = master_password.encode()
+        self.salt = salt
 
-    with open(KEY_FILE, "rb") as file:
-        return file.read()
-    
+        self.key = self._derive_key()
 
-def encrypt_password(password):
-    key = load_key()
-    ciper = Fernet(key)
+        self.cipher = Fernet(self.key)
 
-    encrypted_password = ciper.encrypt(password.encode())
+    def _derive_key(self) -> bytes:
+        """
+        Derive a Fernet-compatible key from the master password.
+        """
 
-    return encrypted_password.decode()
+        kdf = PBKDF2HMAC(
+            algorithm=hashes.SHA256(),
+            length=32,
+            salt=self.salt,
+            iterations=600_000,
+        )
 
-def decrypt_password(encrypted_password):
-    key = load_key()
-    ciper = Fernet(key)
+        key = kdf.derive(self.master_password)
 
-    decrypted_password = ciper.decrypt(encrypted_password.encode())
+        return base64.urlsafe_b64encode(key)
 
-    return decrypted_password.decode()
+    def encrypt(self, password: str) -> str:
+        encrypted = self.cipher.encrypt(password.encode())
+
+        return encrypted.decode()
+
+
+    def decrypt(self, encrypted_password: str) -> str:
+        decrypted = self.cipher.decrypt(
+            encrypted_password.encode()
+        )
+
+        return decrypted.decode()

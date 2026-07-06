@@ -17,6 +17,8 @@ class Database:
         self.connection.row_factory = sqlite3.Row
         self.cursor = self.connection.cursor()
 
+        # Automatically create tables
+        self.create_tables()
 
     def create_tables(self):
         """Create all required tables"""

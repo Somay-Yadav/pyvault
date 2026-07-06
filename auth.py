@@ -1,6 +1,8 @@
 from argon2 import PasswordHasher
 from database import Database
 from argon2.exceptions import VerifyMismatchError
+import os
+import base64
 
 class Auth:
     def __init__(self, database: Database):
@@ -19,9 +21,18 @@ class Auth:
 
         password_hash = self.ph.hash(password)
 
+        # Generate a random 16-byte salt for encryption key derivation
+        salt = os.urandom(16)
+
         self.db.set_setting(
             "master_password_hash",
             password_hash
+        )
+
+        # Store salt as Base64 text
+        self.db.set_setting(
+            "encryption_salt",
+            base64.b64encode(salt).decode()
         )
 
     def verify_master_password(self, password: str) -> bool:
@@ -40,3 +51,15 @@ class Auth:
 
         except VerifyMismatchError:
             return False
+        
+    def get_encryption_salt(self) -> bytes:
+        """
+        Return the encryption salt.
+        """
+
+        salt = self.db.get_setting("encryption_salt")
+
+        if salt is None:
+            raise ValueError("Encryption salt not found.")
+
+        return base64.b64decode(salt)
