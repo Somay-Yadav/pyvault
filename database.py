@@ -206,3 +206,14 @@ class Database:
         row = self.cursor.fetchone()
 
         return row["value"] if row else None
+    
+    def get_all_settings(self) -> list[sqlite3.Row]:
+        """Return all settings."""
+
+        self.cursor.execute("""
+            SELECT *
+            FROM settings
+            ORDER BY key
+        """)
+
+        return self.cursor.fetchall()

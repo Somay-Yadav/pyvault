@@ -1,0 +1,42 @@
+from argon2 import PasswordHasher
+from database import Database
+from argon2.exceptions import VerifyMismatchError
+
+class Auth:
+    def __init__(self, database: Database):
+        self.db = database
+        self.ph = PasswordHasher()
+
+    def has_master_password(self) -> bool:
+        """Return True if a master password has been set."""
+
+        return self.db.get_setting("master_password_hash") is not None
+    
+    def set_master_password(self, password: str) -> None:
+        """
+        Hash and store the master password.
+        """
+
+        password_hash = self.ph.hash(password)
+
+        self.db.set_setting(
+            "master_password_hash",
+            password_hash
+        )
+
+    def verify_master_password(self, password: str) -> bool:
+        """
+        Verify the entered master password.
+        """
+
+        password_hash = self.db.get_setting("master_password_hash")
+
+        if password_hash is None:
+            return False
+
+        try:
+            self.ph.verify(password_hash, password)
+            return True
+
+        except VerifyMismatchError:
+            return False
