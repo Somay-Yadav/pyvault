@@ -42,7 +42,7 @@ def main():
 
     vault = Vault(db, encryption)
 
-    cli = CLI(vault)
+    cli = CLI(vault, auth)
     cli.run()
 
     db.close()

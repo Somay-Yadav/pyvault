@@ -159,3 +159,39 @@ class Vault:
             decrypted.append(account)
 
         return decrypted
+    
+    def change_master_password(
+        self,
+        old_encryption,
+        new_encryption,
+    ):
+
+        accounts = self.db.get_accounts()
+
+        for account in accounts:
+
+            password = old_encryption.decrypt(
+                account["password"]
+            )
+
+            encrypted = new_encryption.encrypt(password)
+
+            self.db.update_password(
+                account["id"],
+                encrypted,
+            )
+    
+    def update_password(self, account_id, password):
+
+        cursor = self.connection.cursor()
+
+        cursor.execute(
+            """
+            UPDATE accounts
+            SET password = ?
+            WHERE id = ?
+            """,
+            (password, account_id),
+        )
+
+        self.connection.commit()

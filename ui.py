@@ -41,7 +41,9 @@ def show_main_menu():
     print("[6] ⭐ Favorites")
     print("[7] 📂 Categories")
     print("[8] ⚙️ Settings")
-    print("[9] 💾 Backup & Restore")
+    print("[9] 🔑 Password Generator")
+    print("[B] 💾 Backup Vault")
+    print("[R] 📝 Restore Vault")
     print("[0] 🚪 Exit")
 
     print("\n══════════════════════════════════════════════════════════════")
@@ -182,3 +184,20 @@ def show_categories(categories):
         )
 
     print("=" * 60)
+
+def show_settings_menu():
+    clear_screen()
+    show_banner()
+
+    print("⚙️ Settings")
+    print("═" * 60)
+
+    print("[1] 🔑 Change Master Password")
+    print("[2] ⏱ Auto Lock Timeout")
+    print("[3] 📋 Clipboard Auto Clear")
+    print("[4] 🎨 Theme")
+    print("[5] ℹ️ About PyVault")
+    print("[0] ⬅ Back")
+
+    print("═" * 60)
+

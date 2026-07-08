@@ -1,9 +1,14 @@
-from ui import clear_screen, show_banner, show_main_menu, pause, show_accounts, show_account_list, show_account_details, show_account_table, show_categories
-
+from ui import clear_screen, show_banner, show_main_menu, pause, show_accounts, show_account_list, show_account_details, show_account_table, show_categories, show_settings_menu
+from utils.password_gen import generate_password, check_strength
+from utils.backup import create_backup
+from utils.restore import list_backups, restore_backup
+from getpass import getpass
+from core.encryption import Encryption
 
 class CLI:
-    def __init__(self, vault):
+    def __init__(self, vault, auth):
         self.vault = vault
+        self.auth = auth
 
     def run(self):
         while True:
@@ -38,6 +43,18 @@ class CLI:
 
             elif choice == "7":
                 self.categories()
+
+            elif choice == "8":
+                self.settings()
+
+            elif choice == "9":
+                self.password_generator()
+
+            elif choice.lower() == "b":
+                self.backup_vault()
+
+            elif choice.lower() == "r":
+                self.restore_vault()
 
             elif choice == "0":
                 print("\nGoodbye, Boss! 👋")
@@ -314,3 +331,254 @@ class CLI:
             )
 
             pause()
+
+    def settings(self):
+        """Settings Menu"""
+
+        while True:
+
+            show_settings_menu()
+
+            choice = input("\nSelect option > ").strip()
+
+            if choice == "1":
+                self.change_master_password()
+
+            elif choice == "2":
+                print("\n🚧 Auto Lock (Coming Soon)")
+                pause()
+
+            elif choice == "3":
+                print("\n🚧 Clipboard Auto Clear (Coming Soon)")
+                pause()
+
+            elif choice == "4":
+                print("\n🚧 Theme (Coming Soon)")
+                pause()
+
+            elif choice == "5":
+                self.about()
+
+            elif choice == "0":
+                break
+
+            else:
+                print("\n❌ Invalid option.")
+                pause()
+
+    def about(self):
+        """Display information about PyVault."""
+
+        clear_screen()
+        show_banner()
+
+        print("ℹ️ About PyVault")
+        print("═" * 60)
+
+        print("Version      : v3")
+        print("Author       : Somay Yadav")
+        print("Language     : Python")
+        print("Database     : SQLite")
+        print("Encryption   : Fernet (AES-128)")
+        print("Hashing      : Argon2")
+        print("License      : MIT")
+        print("Platform     : Windows / Linux / macOS")
+
+        print("\nFeatures")
+        print("• Master Password Authentication")
+        print("• AES Encryption via Fernet")
+        print("• Secure Password Generator")
+        print("• Search, Update & Delete")
+        print("• Favorites & Categories")
+        print("• Offline Local Storage")
+
+        print("\nGitHub")
+        print("https://github.com/Somay-Yadav/pyvault")
+
+        print("\nThank you for using PyVault ❤️")
+
+        print("═" * 60)
+        pause() 
+
+    def password_generator(self):
+        """Interactive password generator."""
+
+        
+
+        while True:
+
+            clear_screen()
+            show_banner()
+
+            print("🔑 Password Generator")
+            print("═" * 60)
+
+            try:
+                length = input("Length (default 15): ").strip()
+                length = int(length) if length else 15
+
+                uppercase = input("Include Uppercase? (Y/n): ").strip().lower() != "n"
+                lowercase = input("Include Lowercase? (Y/n): ").strip().lower() != "n"
+                digits = input("Include Numbers? (Y/n): ").strip().lower() != "n"
+                symbols = input("Include Symbols? (Y/n): ").strip().lower() != "n"
+
+                password = generate_password(
+                    length=length,
+                    uppercase=uppercase,
+                    lowercase=lowercase,
+                    digits=digits,
+                    symbols=symbols,
+                )
+
+            except ValueError as e:
+                print(f"\n❌ {e}")
+                pause()
+                return
+
+            strength = check_strength(password)
+
+            print("\nGenerated Password")
+            print("─" * 60)
+            print(password)
+
+            print("\nStrength")
+            print(f"{strength['bar']}  {strength['label']}")
+
+            if strength["tips"]:
+                print("\nSuggestions:")
+                for tip in strength["tips"]:
+                    print(f"• {tip}")
+
+            print("\n" + "═" * 60)
+            print("\n[1] Generate Again")
+            print("[2] Copy to Clipboard")
+            print("[0] Back")
+
+            choice = input("\nSelect option > ").strip()
+
+            if choice == "1":
+                continue
+
+            elif choice == "2":
+                import pyperclip
+
+                pyperclip.copy(password)
+
+                print("\n✅ Password copied to clipboard.")
+                pause()
+
+            break
+
+    def backup_vault(self):
+
+        clear_screen()
+        show_banner()
+
+        print("💾 Backup Vault")
+        print("=" * 60)
+
+        backup = create_backup()
+
+        print(f"\n✅ Backup created")
+
+        print(backup)
+
+        pause()
+
+    def restore_vault(self):
+
+        clear_screen()
+        show_banner()
+
+        print("📂 Restore Vault")
+        print("═" * 60)
+
+        backups = list_backups()
+
+        if not backups:
+            print("\n❌ No backups found.")
+            pause()
+            return
+
+        for i, backup in enumerate(backups, start=1):
+            print(f"[{i}] {backup.name}")
+
+        print("[0] Back")
+
+        try:
+            choice = int(input("\nSelect Backup > "))
+
+        except ValueError:
+            print("\n❌ Invalid choice.")
+            pause()
+            return
+
+        if choice == 0:
+            return
+
+        if choice < 1 or choice > len(backups):
+            print("\n❌ Invalid selection.")
+            pause()
+            return
+
+        confirm = input(
+            "\n⚠ This will overwrite your current vault.\nContinue? (y/n): "
+        ).lower()
+
+        if confirm != "y":
+            return
+
+        restore_backup(backups[choice - 1])
+
+        print("\n✅ Vault restored successfully.")
+        print("Restart PyVault to use the restored vault.")
+
+        pause()
+
+
+
+    def change_master_password(self):
+
+        clear_screen()
+        show_banner()
+
+        print("🔑 Change Master Password")
+        print("═" * 60)
+
+        current = getpass("Current Password : ")
+
+        if not self.auth.verify_master_password(current):
+            print("\n❌ Incorrect master password.")
+            pause()
+            return
+
+        print()
+
+        new = input("New Password     : ")
+        confirm = input("Confirm Password : ")
+
+        if new != confirm:
+            print("\n❌ Passwords do not match.")
+            pause()
+            return
+
+        if len(new) < 8:
+            print("\n❌ Password must be at least 8 characters.")
+            pause()
+            return
+
+        salt = self.auth.get_encryption_salt()
+
+        old_encryption = Encryption(current, salt)
+        new_encryption = Encryption(new, salt)
+
+        self.vault.change_master_password(
+            old_encryption,
+            new_encryption,
+        )
+
+        self.auth.set_master_password(new)
+
+        print("\n✅ Master password changed successfully.")
+
+        pause()
