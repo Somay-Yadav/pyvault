@@ -1,147 +1,100 @@
-# 🔐 PyVault - Password Manager
+# 🔐 PyVault
 
-PyVault is a secure, offline command-line password manager built with Python.
+> **A secure, offline password manager built with Python.**
 
-It allows users to securely store, search, organize, update, and delete passwords while keeping all saved credentials encrypted using modern cryptography.
-
----
-
-## 🚀 Features
-
-### PyVault v1
-
-* Store passwords locally
-* JSON-based storage
-* View saved passwords
+PyVault is a modern command-line password manager that securely stores your credentials using **Fernet encryption**, **Argon2 password hashing**, and **SQLite**. The project has evolved through multiple versions, with each release introducing new features, better architecture, and stronger security.
 
 ---
 
-### PyVault v2 🔥
+# 🚀 Project Evolution
 
-* 🔐 Secure password generation using Python `secrets`
-* 🔒 Password encryption using `cryptography` (Fernet)
-* 🔑 Master password protection
-* 🛡️ Automatic first-time vault setup
-* 🙈 Hidden password input using `getpass`
-* 💪 Password strength checker
-* 🔎 Search saved passwords
-* ✏️ Update saved passwords
-* 🗑️ Delete saved passwords
-* 📁 Protected sensitive files using `.gitignore`
+## 🟢 PyVault v1
+
+The first version focused on learning Python fundamentals and creating a simple password manager.
+
+### Features
+
+* Password Generator
+* Add Accounts
+* View Saved Passwords
+* Search Passwords
+* JSON Storage
+* Simple CLI Interface
 
 ---
 
-### PyVault v3 🚀
+## 🔵 PyVault v2
 
-#### 🔒 Security
+Version 2 introduced better project organization, security improvements, and persistent storage.
 
-* Master Password Authentication
-* Password hashing using **Argon2**
-* Password encryption using **Fernet**
-* Unique encryption salt for every vault
-* Offline-first design
-* Local SQLite database storage
+### New Features
 
-#### 📦 Account Management
+* SQLite Database
+* Modular Project Structure
+* CRUD Operations
+* Better CLI Navigation
+* Secure Password Generator using `secrets`
+* Improved Code Organization
+* `.gitignore`
+* Better Error Handling
 
-* ➕ Add Account
+---
+
+## 🟣 PyVault v3 (Current)
+
+Version 3 transforms PyVault into a fully featured offline password manager.
+
+### Features
+
+* 🔒 Master Password Authentication
+* 🔐 Fernet Encryption (AES-128)
+* 🔑 Argon2 Password Hashing
+* 🗄️ SQLite Database
+* ➕ Add Accounts
 * 👁️ View Accounts
 * 🔍 Search Accounts
-* ✏️ Update Accounts
+* ✏️ Edit Accounts
 * 🗑️ Delete Accounts
-* 👁️ Reveal / Hide Password
+* ⭐ Favorite Accounts
+* 📂 Categories
+* 🎨 Theme System
+* 🔑 Secure Password Generator
 * 📋 Copy Password to Clipboard
-
-#### ⭐ Organization
-
-* Favorite Accounts
-* Browse Accounts by Category
-* Search by Service, Username, or Category
-
-#### 💻 CLI Experience
-
-* Professional ASCII banner
-* Interactive menu-driven interface
-* Account table view
-* Account details screen
-* Modular OOP architecture
+* 💾 Backup Vault
+* 📂 Restore Vault
+* 🔄 Change Master Password
+* 💻 Cross Platform Support
 
 ---
 
-## 🛠️ Installation
+# 🛡️ Security
 
-Clone the repository:
+PyVault uses modern security practices.
 
-```bash
-git clone https://github.com/Somay-Yadav/pyvault.git
-```
-
-Move into the project folder:
-
-```bash
-cd pyvault
-```
-
-Install dependencies:
-
-```bash
-pip install -r requirements.txt
-```
+* Argon2 Password Hashing
+* PBKDF2-HMAC-SHA256 Key Derivation
+* 600,000 PBKDF2 Iterations
+* Random Encryption Salt
+* Fernet Authenticated Encryption
+* Offline Local Storage
+* No Plain Text Passwords
 
 ---
 
-## ▶️ Usage
+# 📦 Technologies Used
 
-Run PyVault:
-
-```bash
-python main.py
-```
-
-### First Launch
-
-On the first run, PyVault will ask you to create a master password.
-
-This password is used to:
-
-* Authenticate access
-* Encrypt your vault
-* Protect all stored passwords
-
-⚠️ **Do not forget your master password.**
+* Python 3
+* SQLite3
+* Cryptography
+* Argon2-cffi
+* Pyperclip
 
 ---
 
-## 🔐 Security
-
-PyVault uses modern security practices:
-
-* **Argon2** for secure master password hashing
-* **Fernet (AES-based)** encryption for stored passwords
-* Unique encryption salt generated for every vault
-* SQLite database for local storage
-* Passwords are never stored as plain text
-
-Example:
-
-Before:
+# 📂 Project Structure
 
 ```text
-MyPassword123
-```
-
-Encrypted:
-
-```text
-gAAAAABoXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-```
-
----
-
-## 📂 Project Structure
-
-```text
-PyVault/
+pyvault/
 │
 ├── core/
 │   ├── auth.py
@@ -150,76 +103,104 @@ PyVault/
 │   └── vault.py
 │
 ├── utils/
-│   └── clipboard.py
+│   ├── backup.py
+│   ├── clipboard.py
+│   ├── password_gen.py
+│   ├── restore.py
+│   └── theme.py
 │
 ├── data/
-│   └── vault.db
+├── backups/
 │
-├── cli.py
 ├── ui.py
+├── cli.py
 ├── main.py
 ├── requirements.txt
-├── README.md
-└── .gitignore
+└── README.md
 ```
 
 ---
 
-## 📋 Main Menu
+# ⚙️ Installation
 
-```text
-[1] ➕ Add Account
-[2] 👁 View Accounts
-[3] 🔍 Search Accounts
-[4] ✏️ Update Account
-[5] 🗑️ Delete Account
-[6] ⭐ Favorites
-[7] 📂 Categories
-[8] ⚙️ Settings
-[9] 💾 Backup & Restore
-[0] 🚪 Exit
+Clone the repository
+
+```bash
+git clone https://github.com/Somay-Yadav/pyvault.git
+```
+
+Enter the project
+
+```bash
+cd pyvault
+```
+
+Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+Run PyVault
+
+```bash
+python main.py
 ```
 
 ---
 
-## ⚠️ Important
+# 📸 Screenshots
 
-Never share your vault database or backup files.
-
-Your encrypted passwords and application settings are stored locally inside the `data` directory.
-
-Always remember your master password. It cannot be recovered.
+> Screenshots will be added soon.
 
 ---
 
-## 🔮 Future Improvements
+# 🗺️ Roadmap
 
-### v3.x
+### v3.1
 
-* ⚙️ Settings Menu
-* 💾 Backup & Restore
-* 📤 Import / Export
-* 🎲 Password Generator
-* 💪 Password Strength Checker
-* 📋 Clipboard Auto-Clear
-* 🔒 Auto Lock
-* 🎨 Rich CLI Interface
-* 📊 Password Statistics
-* 📝 Audit Logs
+* 📊 Password Health Report
+* 📈 Vault Statistics
+* 📤 Export Vault (CSV/JSON)
+* 📥 Import Vault
+* 🔍 Advanced Search
+* 🌙 More Themes
 
 ### v4
 
-* Desktop GUI
-* Cross-platform installer
-* Secure cloud synchronization (optional)
-* Browser extension
-* Password history
-* Two-factor authentication (2FA)
+* 🎨 Rich Terminal UI
+* ⏱ Auto Lock
+* 📝 Password History
+* 🕒 Last Modified Information
+* 🔑 TOTP (2FA) Support
+* ☁️ Optional Encrypted Cloud Backup
+* 🌍 Multi-language Support
 
 ---
 
-## 👨‍💻 Author
+# 🤝 Contributing
+
+Contributions, bug reports, and feature suggestions are always welcome.
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Open a Pull Request
+
+---
+
+# 📄 License
+
+Licensed under the **MIT License**.
+
+---
+
+# 👨‍💻 Author
 
 **Somay Yadav**
 
-Built with ❤️ using Python 🐍
+GitHub: https://github.com/Somay-Yadav
+
+---
+
+⭐ **If you like this project, don't forget to leave a Star!**
