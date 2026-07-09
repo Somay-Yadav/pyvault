@@ -311,3 +311,20 @@ class Database:
         )
 
         return self.cursor.fetchall()
+
+
+    def update_password(self, account_id: int, password: str):
+        """Update only the encrypted password."""
+
+        cursor = self.connection.cursor()
+
+        cursor.execute(
+            """
+            UPDATE accounts
+            SET password = ?
+            WHERE id = ?
+            """,
+            (password, account_id),
+        )
+
+        self.connection.commit()
