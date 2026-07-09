@@ -1,5 +1,20 @@
 import os
+from utils.theme import get_theme, RESET
 
+def show_banner():
+
+    color = get_theme()
+
+    print(color + r"""
+██████╗ ██╗   ██╗██╗   ██╗ █████╗ ██╗   ██╗██╗  ████████╗
+██╔══██╗╚██╗ ██╔╝██║   ██║██╔══██╗██║   ██║██║  ╚══██╔══╝
+██████╔╝ ╚████╔╝ ██║   ██║███████║██║   ██║██║     ██║
+██╔═══╝   ╚██╔╝  ╚██╗ ██╔╝██╔══██║██║   ██║██║     ██║
+██║        ██║    ╚████╔╝ ██║  ██║╚██████╔╝███████╗██║
+╚═╝        ╚═╝     ╚═══╝  ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝
+
+                    🔐 Secure Password Manager
+""" + RESET)
 
 def clear_screen():
     """Clear the terminal screen."""
@@ -11,22 +26,6 @@ def pause():
     """Wait for the user."""
 
     input("\nPress Enter to continue...")
-
-
-def show_banner():
-    """Display the PyVault banner."""
-
-    print(r"""
-██████╗ ██╗   ██╗██╗   ██╗ █████╗ ██╗   ██╗██╗  ████████╗
-██╔══██╗╚██╗ ██╔╝██║   ██║██╔══██╗██║   ██║██║  ╚══██╔══╝
-██████╔╝ ╚████╔╝ ██║   ██║███████║██║   ██║██║     ██║
-██╔═══╝   ╚██╔╝  ╚██╗ ██╔╝██╔══██║██║   ██║██║     ██║
-██║        ██║    ╚████╔╝ ██║  ██║╚██████╔╝███████╗██║
-╚═╝        ╚═╝     ╚═══╝  ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝
-
-                    🔐 Secure Password Manager
-""")
-
 
 def show_main_menu():
     """Display the main menu."""
@@ -193,10 +192,8 @@ def show_settings_menu():
     print("═" * 60)
 
     print("[1] 🔑 Change Master Password")
-    print("[2] ⏱ Auto Lock Timeout")
-    print("[3] 📋 Clipboard Auto Clear")
-    print("[4] 🎨 Theme")
-    print("[5] ℹ️ About PyVault")
+    print("[2] 🎨 Theme")
+    print("[3] ℹ️ About PyVault")
     print("[0] ⬅ Back")
 
     print("═" * 60)

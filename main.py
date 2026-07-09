@@ -5,7 +5,7 @@ from core.auth import Auth
 from core.encryption import Encryption
 from core.vault import Vault
 from cli import CLI
-
+from utils.theme import set_theme
 
 def main():
     db = Database()
@@ -41,6 +41,13 @@ def main():
     )
 
     vault = Vault(db, encryption)
+
+
+
+    theme = db.get_setting("theme")
+
+    if theme:
+        set_theme(theme)
 
     cli = CLI(vault, auth)
     cli.run()

@@ -4,6 +4,7 @@ from utils.backup import create_backup
 from utils.restore import list_backups, restore_backup
 from getpass import getpass
 from core.encryption import Encryption
+from utils.theme import set_theme
 
 class CLI:
     def __init__(self, vault, auth):
@@ -345,18 +346,9 @@ class CLI:
                 self.change_master_password()
 
             elif choice == "2":
-                print("\n🚧 Auto Lock (Coming Soon)")
-                pause()
+                self.change_theme()
 
             elif choice == "3":
-                print("\n🚧 Clipboard Auto Clear (Coming Soon)")
-                pause()
-
-            elif choice == "4":
-                print("\n🚧 Theme (Coming Soon)")
-                pause()
-
-            elif choice == "5":
                 self.about()
 
             elif choice == "0":
@@ -580,5 +572,54 @@ class CLI:
         self.auth.set_master_password(new)
 
         print("\n✅ Master password changed successfully.")
+
+        pause()
+
+    def change_theme(self):
+
+        clear_screen()
+        show_banner()
+
+        print("🎨 Select Theme")
+        print("═" * 60)
+
+        themes = [
+            "default",
+            "blue",
+            "green",
+            "red",
+            "purple",
+            "yellow",
+        ]
+
+        for i, theme in enumerate(themes, start=1):
+            print(f"[{i}] {theme.title()}")
+
+        print("[0] Back")
+
+        choice = input("\nSelect Theme > ").strip()
+
+        if choice == "0":
+            return
+
+        if not choice.isdigit():
+            print("\n❌ Invalid choice.")
+            pause()
+            return
+
+        index = int(choice) - 1
+
+        if index < 0 or index >= len(themes):
+            print("\n❌ Invalid choice.")
+            pause()
+            return
+
+        theme = themes[index]
+
+        self.vault.db.set_setting("theme", theme)
+
+        set_theme(theme)
+
+        print(f"\n✅ Theme changed to {theme.title()}!")
 
         pause()
