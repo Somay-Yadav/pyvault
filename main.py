@@ -23,7 +23,10 @@ def main():
             print("❌ Passwords do not match.")
             return
 
-        auth.set_master_password(password)
+        auth.set_master_password(
+            password,
+            create_salt=True,
+        )
         print("✅ Master password created.\n")
 
     # Login

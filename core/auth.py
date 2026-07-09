@@ -14,26 +14,22 @@ class Auth:
 
         return self.db.get_setting("master_password_hash") is not None
     
-    def set_master_password(self, password: str) -> None:
-        """
-        Hash and store the master password.
-        """
-
+    def set_master_password(self, password: str, create_salt: bool = False):
         password_hash = self.ph.hash(password)
-
-        # Generate a random 16-byte salt for encryption key derivation
-        salt = os.urandom(16)
 
         self.db.set_setting(
             "master_password_hash",
-            password_hash
+            password_hash,
         )
 
-        # Store salt as Base64 text
-        self.db.set_setting(
-            "encryption_salt",
-            base64.b64encode(salt).decode()
-        )
+        if create_salt:
+            salt = os.urandom(16)
+            
+            # Store salt as Base64 text
+            self.db.set_setting(
+                "encryption_salt",
+                base64.b64encode(salt).decode()
+            )
 
     def verify_master_password(self, password: str) -> bool:
         """
